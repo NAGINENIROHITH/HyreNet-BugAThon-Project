@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="HyreNet BugAThon Test Suite" parallel="false" thread-count="1">
+    
+    <listeners>
+        <listener class-name="listeners.TestListener"/>
+    </listeners>
+    
+    <test name="Complete BugAThon End-to-End Flow">
+        <classes>
+            <class name="tests.PlaceOrderTest"/>
+        </classes>
+    </test>
+    
+</suite>
