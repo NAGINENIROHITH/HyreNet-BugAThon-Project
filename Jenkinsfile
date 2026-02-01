@@ -59,22 +59,26 @@ pipeline {
             // Archive test reports
             archiveArtifacts artifacts: 'test-output/**/*', allowEmptyArchive: true
             
-            // Publish TestNG results
-            step([$class: 'Publisher', reportFilenamePattern: 'test-output/testng-results.xml'])
+            // Note: Removed problematic TestNG results publisher for pipeline compatibility
         }
         
         success {
             echo 'Tests completed successfully!'
-            // Send email notification on success
-            emailext (
-                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: """
-                    <p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'</p>
-                    <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>
-                """,
-                to: 'rohithnagineni.863@gmail.com',
-                mimeType: 'text/html'
-            )
+            try {
+                // Send email notification on success
+                emailext (
+                    subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                    body: """
+                        <p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'</p>
+                        <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>
+                    """,
+                    to: 'rohithnagineni.863@gmail.com',
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                    mimeType: 'text/html'
+                )
+            } catch (Exception e) {
+                echo "Email notification failed (SMTP likely not configured): ${e.message}"
+            }
         }
         
         failure {
