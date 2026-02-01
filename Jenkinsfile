@@ -64,20 +64,22 @@ pipeline {
         
         success {
             echo 'Tests completed successfully!'
-            try {
-                // Send email notification on success
-                emailext (
-                    subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                    body: """
-                        <p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'</p>
-                        <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>
-                    """,
-                    to: 'rohithnagineni.863@gmail.com',
-                    recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                    mimeType: 'text/html'
-                )
-            } catch (Exception e) {
-                echo "Email notification failed (SMTP likely not configured): ${e.message}"
+            script {
+                try {
+                    // Send email notification on success
+                    emailext (
+                        subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        body: """
+                            <p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'</p>
+                            <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>
+                        """,
+                        to: 'rohithnagineni.863@gmail.com',
+                        recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                        mimeType: 'text/html'
+                    )
+                } catch (Exception e) {
+                    echo "Email notification failed (SMTP likely not configured): ${e.message}"
+                }
             }
         }
         
