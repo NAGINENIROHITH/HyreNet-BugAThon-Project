@@ -22,14 +22,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
         
         stage('Run Tests') {
             steps {
                 echo "Running tests with browser: ${params.BROWSER}, headless: ${params.HEADLESS}"
-                sh "mvn test -Dbrowser=${params.BROWSER} -Dheadless=${params.HEADLESS}"
+                bat "mvn test -Dbrowser=${params.BROWSER} -Dheadless=${params.HEADLESS}"
             }
         }
         
